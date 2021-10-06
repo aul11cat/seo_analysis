@@ -1,0 +1,10 @@
+version: '2'
+services:
+  express:
+    build:
+      context: .
+    container_name: express
+    ports:
+      - ${PORT}:3000
+    volumes:
+    - .:/workspace
