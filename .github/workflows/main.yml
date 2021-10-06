@@ -36,4 +36,4 @@ jobs:
           echo test, and deploy your project.
       # Runs test
       - name: Run Jest
-        run: jest
+        run: npm i && jest
