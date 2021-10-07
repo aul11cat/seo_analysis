@@ -1,6 +1,7 @@
 FROM node:14
 
 WORKDIR /workspace
+COPY . /workspace
 
 RUN npm install
 EXPOSE 3000
