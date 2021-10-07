@@ -3,19 +3,24 @@ const htmlToJson = require('html-to-json');
 const errorHandle = (err, result) => {
     console.log(result)
 }
+
+/**
+ * 判斷是否為網址
+ * @param string
+ * @returns {boolean}
+ */
 const isWebsite = (string) => {
     const regx = RegExp(/^http.*/)
     return regx.test(string.trim())
 }
 
-
-// 檢查標題是否存在
-exports.documentTitleIsExist = (html = ``) => {
-
-    const handle = function($doc) {
-        return $doc.find('title').length !== 0;
-    }
-
+/**
+ * 回傳處理方式
+ * @param html
+ * @param handle
+ * @param errorHandle
+ */
+const htmlToJsonHandleWay = (html, handle, errorHandle) => {
     if (isWebsite(html)) {
         return htmlToJson.request(html, handle, errorHandle);
     }
@@ -23,21 +28,39 @@ exports.documentTitleIsExist = (html = ``) => {
     return htmlToJson.parse(html, handle, errorHandle);
 }
 
-// 檢查Meta description是否存在
-exports.documentMetaDescriptionIsExist = (html) => {
+/**
+ * 檢查標題是否存在
+ * @param html
+ * @returns {boolean}
+ */
+exports.documentTitleIsExist = (html = ``) => {
+
+    const handle = function ($doc) {
+        return $doc.find('title').length !== 0;
+    }
+
+    return htmlToJsonHandleWay(html, handle, errorHandle);
+}
+
+/**
+ * 檢查Meta description是否存在
+ * @param html
+ * @returns boolean
+ */
+exports.documentMetaDescriptionIsExist = (html = ``) => {
     const handle = function ($doc) {
         return $doc.find('meta[name=description]').length !== 0;
     }
 
-    if (isWebsite(html)) {
-        return htmlToJson.request(html, handle, errorHandle);
-    }
-
-    return htmlToJson.parse(html, handle, errorHandle);
+    return htmlToJsonHandleWay(html, handle, errorHandle);
 }
 
-// 檢查多少有圖片 及 有多少圖沒有alt
-exports.documentImgNoAltCount = (html) => {
+/**
+ * 檢查多少有圖片 及 有多少圖沒有alt
+ * @param html
+ * @returns {total , noAlt}
+ */
+exports.documentImgNoAltCount = (html = ``) => {
     const handle = function ($doc) {
         const images = $doc.find('img');
         let noAlt = 0, total = 0;
@@ -46,7 +69,7 @@ exports.documentImgNoAltCount = (html) => {
             Object.keys(images).forEach((i, index) => {
                 if (index < total) {
                     if (images[index].attribs) {
-                        if (images[i].attribs.alt.length === 0) {
+                        if (!images[i].attribs.alt) {
                             noAlt++;
                         }
                     }
@@ -57,9 +80,5 @@ exports.documentImgNoAltCount = (html) => {
         return {total, noAlt};
     }
 
-    if (isWebsite(html)) {
-        return htmlToJson.request(html, handle, errorHandle);
-    }
-
-    return htmlToJson.parse(html, handle, errorHandle);
+    return htmlToJsonHandleWay(html, handle, errorHandle);
 }
