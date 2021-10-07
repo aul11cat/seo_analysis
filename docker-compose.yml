@@ -3,8 +3,9 @@ services:
   express:
     build:
       context: .
-    container_name: express
+    container_name: ${COMPOSE_PROJECT_NAME}_express
     ports:
       - ${PORT}:3000
     volumes:
-    - .:/workspace
+      - .:/workspace/
+      - /workspace/node_modules
