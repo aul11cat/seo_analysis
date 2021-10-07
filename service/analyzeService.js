@@ -36,7 +36,7 @@ const htmlToJsonHandleWay = (html, handle, errorHandle) => {
 exports.documentTitleIsExist = (html = ``) => {
 
     const handle = function ($doc) {
-        return $doc.find('title').length !== 0;
+        return $doc.find('head title').length !== 0;
     }
 
     return htmlToJsonHandleWay(html, handle, errorHandle);
@@ -68,8 +68,9 @@ exports.documentImgNoAltCount = (html = ``) => {
             total = images.length;
             Object.keys(images).forEach((i, index) => {
                 if (index < total) {
-                    if (images[index].attribs) {
-                        if (!images[i].attribs.alt) {
+                    const attribs = images[index].attribs;
+                    if (attribs) {
+                        if (!attribs.alt) {
                             noAlt++;
                         }
                     }

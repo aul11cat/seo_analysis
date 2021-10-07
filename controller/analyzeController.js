@@ -18,16 +18,13 @@ exports.analyzeHtml = (req, res) => {
 
 
 const toAnalyze = (html, res) => {
-    const imageResultFun = ({total, noAlt}) => {
-        const result = {result: `不符合`, text: ``};
-        if (total === 0 || noAlt > 0) {
-            if (total === 0) {
-                result.text = `無 Image Tag`;
-            } else {
-                result.text = `此 HTML 有 ${noAlt} 個 img 不含 alt 屬性`
-            }
-        }
+    const imageResultFun = ({noAlt}) => {
+        const result = {result: `符合`, text: ``};
 
+        if (noAlt > 0) {
+            result.result = `不符合`;
+            result.text = `此 HTML 有 ${noAlt} 個 img 不含 alt 屬性`
+        }
 
         return result;
     }
