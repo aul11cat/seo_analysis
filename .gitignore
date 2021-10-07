@@ -2,3 +2,5 @@ node_modules/*
 
 # IDE Setting
 .idea/*
+
+package-lock.json
